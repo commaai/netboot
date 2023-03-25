@@ -1,3 +1,3 @@
 [submodule "ipxe"]
 	path = third_party/ipxe
-	url = https://github.com/ipxe/ipxe.git
+	url = https://github.com/commaai/ipxe.git
