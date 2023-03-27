@@ -19,3 +19,9 @@ The canonical import path for Go packages in this repository is `go.universe.tf/
 - [tftp](https://godoc.org/go.universe.tf/netboot/tftp): Read-only TFTP server implementation.
 - [pixiecore](https://godoc.org/go.universe.tf/netboot/pixiecore): Go library for Pixiecore tool functionality. Every stability warning in this repository applies double for this package.
 
+## Build
+```sh
+./build.sh
+# start server (example)
+./run.sh
+```
