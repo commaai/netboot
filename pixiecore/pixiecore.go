@@ -72,6 +72,8 @@ type Machine struct {
 
 // A Spec describes a kernel and associated configuration.
 type Spec struct {
+	// Whether to proxy the kernel and initrd
+	Proxy bool
 	// The kernel to boot
 	Kernel ID
 	// Optional init ramdisks for linux kernels

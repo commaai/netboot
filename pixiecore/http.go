@@ -191,11 +191,20 @@ func ipxeScript(mach Machine, spec *Spec, serverHost string) ([]byte, error) {
 
 	urlTemplate := fmt.Sprintf("http://%s/_/file?name=%%s&type=%%s&mac=%%s", serverHost)
 	var b bytes.Buffer
+	var u string
 	b.WriteString("#!ipxe\n")
-	u := fmt.Sprintf(urlTemplate, url.QueryEscape(string(spec.Kernel)), "kernel", url.QueryEscape(mach.MAC.String()))
+	if spec.Proxy {
+		u = fmt.Sprintf(urlTemplate, url.QueryEscape(string(spec.Kernel)), "kernel", url.QueryEscape(mach.MAC.String()))
+	} else {
+		u = string(spec.Kernel)
+	}
 	fmt.Fprintf(&b, "kernel --name kernel %s\n", u)
 	for i, initrd := range spec.Initrd {
-		u = fmt.Sprintf(urlTemplate, url.QueryEscape(string(initrd)), "initrd", url.QueryEscape(mach.MAC.String()))
+		if spec.Proxy {
+			u = fmt.Sprintf(urlTemplate, url.QueryEscape(string(initrd)), "initrd", url.QueryEscape(mach.MAC.String()))
+		} else {
+			u = string(initrd)
+		}
 		fmt.Fprintf(&b, "initrd --name initrd%d %s\n", i, u)
 	}
 

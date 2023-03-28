@@ -171,6 +171,7 @@ func (b *apibooter) BootSpec(m Machine) (*Spec, error) {
 	}
 
 	r := struct {
+		Proxy      bool        `json:"proxy"`
 		Kernel     string      `json:"kernel"`
 		Initrd     []string    `json:"initrd"`
 		Cmdline    interface{} `json:"cmdline"`
@@ -201,13 +202,22 @@ func (b *apibooter) BootSpec(m Machine) (*Spec, error) {
 	ret := Spec{
 		Message: r.Message,
 	}
-	if ret.Kernel, err = signURL(r.Kernel, &b.key); err != nil {
-		return nil, err
+	if r.Proxy {
+		if ret.Kernel, err = signURL(r.Kernel, &b.key); err != nil {
+			return nil, err
+		}
+	} else {
+		ret.Kernel = ID(r.Kernel)
 	}
 	for _, img := range r.Initrd {
-		initrd, err := signURL(img, &b.key)
-		if err != nil {
-			return nil, err
+		var initrd ID
+		if r.Proxy {
+			initrd, err = signURL(img, &b.key)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			initrd = ID(img)
 		}
 		ret.Initrd = append(ret.Initrd, initrd)
 	}
