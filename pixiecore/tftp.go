@@ -62,7 +62,7 @@ func extractInfo(path string) (net.HardwareAddr, int, error) {
 func (s *Server) logTFTPTransfer(clientAddr net.Addr, path string, err error) {
 	mac, _, pathErr := extractInfo(path)
 	if pathErr != nil {
-		s.log("TFTP", "unable to extract mac from request:%v", pathErr)
+		s.log("TFTP", "unable to extract mac from request: (%v) %q", path, pathErr)
 		return
 	}
 	if err != nil {
